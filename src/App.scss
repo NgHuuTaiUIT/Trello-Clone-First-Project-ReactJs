@@ -1,4 +1,4 @@
-@import "./setting";
+@import "_setting.scss";
 
 body {
   margin: 0;
@@ -9,8 +9,13 @@ body {
 .App {
   overflow: hidden;
   height: 100vh;
-  display: grid;
-  grid-template-rows: auto auto 1fr;
+  // display: grid;
+  // grid-template-rows: auto auto 1fr;
   line-height: 1.3em;
   background-color: $board-bg-color;
+  color: $default-text-color;
+  .icon {
+    font-size: 14px;
+    margin: 3px;
+  }
 }
