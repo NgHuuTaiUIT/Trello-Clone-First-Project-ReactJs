@@ -1,19 +1,18 @@
-@import '_setting';
+@import "_setting";
 
-li.card-item {
-    background-color:white;
-    padding:$gap;
-    border-radius: $card-border-radius;
-    box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.1);
-    &:not(:last-child){
-        margin-bottom: $gap;
-    }
-    img {
-        display: block;
-        width: calc(100% + 2 * #{$gap});
-        margin: -$gap 0 $gap (-$gap);
-        border-top-left-radius: $column-border-radius;
-        border-top-right-radius: $column-border-radius;
-    }
-    
+.card-item {
+  background-color: white;
+  padding: $gap;
+  margin-bottom: $gap;
+
+  border-radius: $card-border-radius;
+  box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  img {
+    display: block;
+    width: calc(100% + 2 * #{$gap});
+    margin: -$gap 0 $gap (-$gap);
+    border-top-left-radius: $column-border-radius;
+    border-top-right-radius: $column-border-radius;
+  }
 }

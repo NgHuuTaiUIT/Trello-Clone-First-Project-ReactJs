@@ -1,15 +1,16 @@
-@import './setting';
+@import "./setting";
 
 body {
-    margin: 0;
-    font-size:14px;
-    font-family: sans-serif;
-    line-height:1.3em;
+  margin: 0;
+  font-size: 14px;
+  font-family: sans-serif;
+  line-height: 1.3em;
 }
 .App {
-    height: 100vh;
-    display: grid;
-    grid-template-rows: 40px 50px 1fr;
-    line-height: 1.3em;
-    background-color:$board-bg-color;
+  overflow: hidden;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  line-height: 1.3em;
+  background-color: $board-bg-color;
 }

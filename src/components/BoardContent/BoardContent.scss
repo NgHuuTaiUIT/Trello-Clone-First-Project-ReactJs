@@ -1,20 +1,27 @@
-@import '_setting';
+@import "_setting";
 
 $common-element-bg: rgba(255, 255, 255, 0.24);
 
 .board-content {
-    display: flex;
-    margin:0 $gap $gap;
-    overflow-x: auto;
-    &::-webkit-scrollbar {
-        -webkit-appearance: none;
-    }
-    &::-webkit-scrollbar:horizontal {
-        height:10px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: $common-element-bg;
-        border-radius: 8px;
-    }
-    
+  // display: flex;
+  // margin: 0 $gap $gap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: $board-content-height;
+
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  &::-webkit-scrollbar:horizontal {
+    height: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $common-element-bg;
+    border-radius: 8px;
+  }
+  .column-drop-preview {
+    background-color: rgba(137, 180, 19, 0.1);
+    border: 1px dashed rgb(255, 255, 255);
+    margin: 5px 45px 5px 5px;
+  }
 }
