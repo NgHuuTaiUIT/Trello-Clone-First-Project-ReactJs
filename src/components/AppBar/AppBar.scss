@@ -1,11 +1,12 @@
-@import '_setting.scss';
+@import "_setting.scss";
 
-$appbar-bg-color:#00b67f;
+$appbar-bg-color: #00b67f;
 
 .navbar-app {
-    background-color:$appbar-bg-color;
-    font-size:1.5em;
-    padding-left: 10px;
-    display: flex;
-    align-items: center;
+  background-color: $appbar-bg-color;
+  font-size: 1.5em;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  height: $board-app-height;
 }
