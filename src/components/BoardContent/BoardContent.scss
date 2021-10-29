@@ -3,7 +3,7 @@
 $common-element-bg: rgba(255, 255, 255, 0.24);
 
 .board-content {
-  // display: flex;
+  display: flex;
   // margin: 0 $gap $gap;
   overflow-x: auto;
   overflow-y: hidden;
@@ -23,5 +23,20 @@ $common-element-bg: rgba(255, 255, 255, 0.24);
     background-color: rgba(137, 180, 19, 0.1);
     border: 1px dashed rgb(255, 255, 255);
     margin: 5px 45px 5px 5px;
+  }
+  .btn-add-cl {
+    cursor: pointer;
+    width: 250px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 16px;
+    color: white;
+    padding: 4px 0 4px 15px;
+    margin-left: $gap;
+    background: rgba(255, 255, 255, 0.24);
+    border-radius: $column-border-radius;
+    &:hover {
+      background: rgba(255, 255, 255, 0.34);
+    }
   }
 }
