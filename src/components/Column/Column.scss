@@ -11,14 +11,50 @@ $cl-height: calc(#{$board-content-height} - #{$gap * 2});
     padding: 0 8px;
   }
   header.column-drag-handle {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
     padding-left: 15px;
-    height: 36px;
     line-height: $column-header-height;
     font-size: 16px;
     font-weight: bold;
     border-top-left-radius: $column-border-radius;
     border-top-right-radius: $column-border-radius;
     cursor: pointer;
+    .column-title {
+      flex: 90%;
+    }
+    .input-column-title {
+      flex: 10%;
+      button.btn-dropdown {
+        border: none;
+        background: rgba(255, 255, 255, 0);
+        color: $default-text-color;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: none;
+        padding: 0 $gap;
+        letter-spacing: 1px;
+        &::after {
+          content: "...";
+          border: none;
+        }
+        &:hover {
+          background: darken($list-bg-color, 10);
+        }
+      }
+      .dropdown-menu {
+        padding: 0;
+        min-width: 200px;
+        a.dropdown-item {
+          padding-left: 10px;
+          font-size: 14px;
+          &:not(:last-child) {
+            border-bottom: 1px solid darken($list-bg-color, 10);
+          }
+        }
+      }
+    }
   }
   footer {
     padding-left: 10px;

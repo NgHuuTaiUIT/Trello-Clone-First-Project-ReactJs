@@ -8,7 +8,10 @@ $common-element-bg: rgba(255, 255, 255, 0.24);
   overflow-x: auto;
   overflow-y: hidden;
   height: $board-content-height;
-
+  &::after {
+    content: "";
+    flex: 0 0 $gap;
+  }
   &::-webkit-scrollbar {
     -webkit-appearance: none;
   }
@@ -24,19 +27,46 @@ $common-element-bg: rgba(255, 255, 255, 0.24);
     border: 1px dashed rgb(255, 255, 255);
     margin: 5px 45px 5px 5px;
   }
-  .btn-add-cl {
-    cursor: pointer;
-    width: 250px;
-    height: 32px;
-    line-height: 32px;
-    font-size: 16px;
-    color: white;
-    padding: 4px 0 4px 15px;
-    margin-left: $gap;
-    background: rgba(255, 255, 255, 0.24);
-    border-radius: $column-border-radius;
-    &:hover {
-      background: rgba(255, 255, 255, 0.34);
-    }
-  }
+  // .btn-add-cl {
+  //   cursor: pointer;
+  //   width: 250px;
+  //   max-width: 250px;
+  //   // height: 32px;
+  //   line-height: 32px;
+  //   font-size: 16px;
+  //   color: white;
+  //   padding: 4px 0 4px 15px;
+  //   margin-left: $gap;
+  //   background: rgba(255, 255, 255, 0.24);
+  //   border-radius: $column-border-radius;
+  //   &:hover {
+  //     background: rgba(255, 255, 255, 0.34);
+  //   }
+  // }
+  // .bg-input-name-cl {
+  //   width: 250px;
+  //   max-width: 250 px;
+  //   background: $list-bg-color;
+  //   padding: 4px 15px;
+  //   line-height: 32px;
+  //   margin-left: $gap;
+  //   border-radius: 0 0 $column-border-radius $column-border-radius;
+  //   &#input-name-cl {
+  //     margin-top: 10px;
+  //   }
+  // }
+  // .box-btn {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   padding: $gap 0;
+  //   i {
+  //     cursor: pointer;
+  //     font-size: 20px;
+  //   }
+  // }
+  // .row {
+  //   width: 250px;
+  //   max-width: 250;
+  // }
 }
