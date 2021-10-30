@@ -84,6 +84,22 @@ function BoardContent() {
     setBoard(newBoards);
   };
 
+  // const onAddNewCardToColumn = (newColomn) => {
+  //   let newColumns = [...columns];
+  //   let newBoards = { ...board };
+
+  //   const newColumnsIndex = newColumns.findIndex(
+  //     (item) => item.id === newColomn.id
+  //   );
+  //   newColumns.splice(newColumnsIndex, 1, newColomn);
+
+  //   newBoards.columnOrder = newColumns.map((c) => c.id);
+  //   newBoards.columns = newColumns;
+
+  //   setColumns(newColumns);
+  //   setBoard(newBoards);
+  // };
+
   return (
     <div className="board-content">
       <Container

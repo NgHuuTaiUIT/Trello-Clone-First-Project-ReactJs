@@ -6,6 +6,7 @@ $cl-height: calc(#{$board-content-height} - #{$gap * 2});
   width: 300px;
   margin-left: $gap;
   height: $cl-height;
+  border-radius: $column-border-radius;
   > * {
     background-color: $list-bg-color;
     padding: 0 8px;
@@ -58,10 +59,10 @@ $cl-height: calc(#{$board-content-height} - #{$gap * 2});
   }
   footer {
     padding-left: 10px;
-    // height: 36px;
+    // height: 45px;
     line-height: $column-footer-height;
     font-size: 16px;
-    // font-weight: bold;
+    font-weight: bold;
     color: #888;
     border-bottom-left-radius: $column-border-radius;
     border-bottom-right-radius: $column-border-radius;
@@ -71,13 +72,27 @@ $cl-height: calc(#{$board-content-height} - #{$gap * 2});
         cursor: pointer;
       }
     }
+    .box-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 5px;
+      i {
+        cursor: pointer;
+        font-size: 20px;
+      }
+    }
   }
   .card-list {
     margin: 0;
     max-height: calc(
       #{$cl-height} - #{$column-header-height} - #{$column-footer-height}
     );
+
     overflow-y: auto;
+    .input-new-card {
+      margin-bottom: $gap;
+    }
     &::-webkit-scrollbar {
       -webkit-appearance: none;
     }

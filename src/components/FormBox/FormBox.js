@@ -17,6 +17,8 @@ function FormBox(props) {
   const { board, onUpdateColumn } = props;
 
   const [formState, setFormState] = useState(false);
+  const handleFormState = () => setFormState(!formState);
+
   const [nameColumn, setNameColumn] = useState("");
 
   const inputAddColumnRef = useRef(null);
@@ -54,8 +56,6 @@ function FormBox(props) {
     setNameColumn("");
     setFormState(false);
   };
-
-  const handleFormState = () => setFormState(!formState);
 
   return (
     <BootstrapContainer className="bootstrap-container">
