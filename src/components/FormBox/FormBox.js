@@ -7,7 +7,7 @@ import {
   Row,
   Col,
   Form,
-  Button,
+  Button
 } from "react-bootstrap";
 
 function FormBox(props) {
@@ -36,19 +36,15 @@ function FormBox(props) {
       return;
     }
 
-    const idColumn = Math.random().toString(36).substr(2, 5);
     const newColumnAdded = {
-      id: idColumn,
-      boardId: board.id,
-      title: nameColumn.trim(),
-      cardOrder: [],
-      cards: [],
+      boardId: board._id,
+      title: nameColumn.trim()
     };
     onUpdateColumn(ACTION_ADD, newColumnAdded);
     // let newColumns = [...columns];
     // newColumns.push(newColumnAdded);
     // let newBoards = { ...board };
-    // newBoards.columnOrder = newColumns.map((c) => c.id);
+    // newBoards.columnOrder = newColumns.map((c) => c._id);
     // newBoards.columns = newColumns;
 
     // setColumns(newColumns);

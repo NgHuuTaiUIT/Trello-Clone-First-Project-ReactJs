@@ -6,17 +6,18 @@ import {
   MODAL_ACTION_CONFIRM,
   MODAL_ACTION_CLOSE,
   ACTION_REMOVE,
-  ACTION_UPDATE,
+  ACTION_UPDATE
 } from "utilities/constants";
 import { cloneDeep } from "lodash";
 import { mapOrder } from "utilities/sort";
 import {
   selectAllText,
-  saveContentAfterEnter,
+  saveContentAfterEnter
 } from "utilities/contentEditable";
 
 import { Container, Draggable } from "react-smooth-dnd";
 import { Dropdown, Form, Button } from "react-bootstrap";
+import { createNewCard, updateCard, updateColumn } from "actions/APIs";
 function Column(props) {
   const { column, onCardDrop, onUpdateColumn, onAddNewCardToColumn } = props;
 
@@ -29,7 +30,8 @@ function Column(props) {
   const [formState, setFormState] = useState(false);
   const handleFormState = () => setFormState(!formState);
   // const cards = mapOrder(column.cards, column.cardOrder, "id");
-  const cards = column.cards;
+  const cards = mapOrder(column.cards, column.cardOrder, "_id") || [];
+  // const cards = column.cards || [];
 
   const messagesEndRef = useRef();
 
@@ -45,30 +47,55 @@ function Column(props) {
       scrollToBottom();
     }
   }, [formState]);
+
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
+
   const handleAddNewCard = () => {
     if (!cardTitle) {
       inputAddCardRef.current.focus();
       return;
     }
 
-    const idCard = Math.random().toString(36).substr(2, 5);
     const newCardAdded = {
-      id: idCard,
       boardId: column.boardId,
-      columnId: column.id,
-      title: cardTitle,
-      cover: null,
+      columnId: column._id,
+      title: cardTitle
     };
     // onUpdateColumn(ACTION_ADD, newColumnAdded);
-    let newColumn = cloneDeep(column);
-    newColumn.cards.push(newCardAdded);
-    newColumn.cardOrder.push(newCardAdded.id);
-    onUpdateColumn(ACTION_UPDATE, newColumn);
-    setCardTitle("");
-    setFormState(false);
+    createNewCard(newCardAdded).then((card) => {
+      let newColumn = cloneDeep(column);
+      newColumn.cards.push(card);
+      newColumn.cardOrder.push(card._id);
+      onUpdateColumn(ACTION_UPDATE, newColumn);
+      setCardTitle("");
+      setFormState(false);
+    });
+  };
+
+  const onUpdateCard = (action, data, callback) => {
+    if (action === ACTION_UPDATE) {
+      updateCard(data._id, data).catch((card) => {
+        callback();
+      });
+      const indexCard = column.cards.findIndex((card) => card._id == data._id);
+      column.cards.splice(indexCard, 1, data);
+    }
+    if (action === ACTION_REMOVE) {
+      updateCard(data._id, data);
+      let newColumn = cloneDeep(column);
+      const indexCardOrder = newColumn.cardOrder.findIndex(
+        (card) => card == data._id
+      );
+      newColumn.cardOrder.splice(indexCardOrder, 1);
+      const indexCard = column.cards.findIndex((card) => card._id == data._id);
+      newColumn.cards.splice(indexCard, 1);
+      updateColumn(newColumn._id, newColumn).then((column) => {
+        column.cards = newColumn.cards;
+        onUpdateColumn(ACTION_UPDATE, column);
+      });
+    }
   };
 
   const handleShowConfirmModal = () => setShowConfirmModal(!showConfirmModal);
@@ -76,7 +103,10 @@ function Column(props) {
   const onConfirmModalAction = (type) => {
     if (type === MODAL_ACTION_CONFIRM) {
       const columnRemoved = { ...column, _destroy: true };
-      onUpdateColumn(ACTION_REMOVE, columnRemoved);
+      updateColumn(columnRemoved._id, columnRemoved).then((column) => {
+        column.cards = columnRemoved.cards;
+        onUpdateColumn(ACTION_REMOVE, columnRemoved);
+      });
     }
     handleShowConfirmModal();
   };
@@ -87,8 +117,12 @@ function Column(props) {
 
   const handleChangeNameBlur = () => {
     const columnUpdated = { ...column, title: columnTitle };
-    onUpdateColumn(ACTION_UPDATE, columnUpdated);
-    console.log(columnTitle);
+    if (columnTitle !== column.title) {
+      updateColumn(columnUpdated._id, columnUpdated).then((column) => {
+        column.cards = columnUpdated.cards;
+        onUpdateColumn(ACTION_UPDATE, column);
+      });
+    }
   };
 
   return (
@@ -137,7 +171,7 @@ function Column(props) {
         <Container
           groupName="col"
           orientation="vertical"
-          onDrop={(dropResult) => onCardDrop(column.id, dropResult)}
+          onDrop={(dropResult) => onCardDrop(column._id, dropResult)}
           getChildPayload={(index) => cards[index]}
           dragHandleSelector=""
           dragClass="card-ghost"
@@ -145,12 +179,12 @@ function Column(props) {
           dropPlaceholder={{
             animationDuration: 150,
             showOnTop: true,
-            className: "card-drop-preview",
+            className: "card-drop-preview"
           }}
         >
           {cards.map((card, index) => (
             <Draggable key={index}>
-              <Card card={card} />
+              <Card card={card} onUpdateCard={onUpdateCard} />
             </Draggable>
           ))}
         </Container>

@@ -4,55 +4,107 @@ import Column from "components/Column/Column";
 import FormBox from "components/FormBox/FormBox";
 import { mapOrder } from "utilities/sort";
 import { initialData } from "actions/initialData";
-import { isEmpty } from "lodash";
+import { isEmpty, cloneDeep } from "lodash";
 import { Container, Draggable } from "react-smooth-dnd";
 import { applyDrag } from "utilities/utils";
 import { ACTION_REMOVE, ACTION_UPDATE, ACTION_ADD } from "utilities/constants";
+import {
+  apiGetDataBoard,
+  createNewColumn,
+  updateBoard,
+  updateCard,
+  updateColumn
+} from "actions/APIs";
 
 function BoardContent() {
   const [board, setBoard] = useState({});
   const [columns, setColumns] = useState([]);
 
   useEffect(() => {
-    const boardFromDB = initialData.board.find(
-      (board) => board.id === "board-1"
-    );
-    if (boardFromDB) {
-      setBoard(boardFromDB);
+    apiGetDataBoard().then((data) => {
+      console.log(data);
+      setBoard(data);
+      const columnSorted = mapOrder(data.columns, data.columnOrder, "_id");
+      setColumns(columnSorted);
+      // setColumns(data.columns);
+    });
 
-      // sort column
+    // const boardFromDB = initialData.board.find(
+    //   (board) => board._id === "board-1"
+    // );
+    // if (boardFromDB) {
+    //   setBoard(boardFromDB);
 
-      setColumns(mapOrder(boardFromDB.columns, boardFromDB.columnOrder, "id"));
-      //   setColumns(boardFromDB.columns);
-    }
+    //   // sort column
+
+    //   setColumns(mapOrder(boardFromDB.columns, boardFromDB.columnOrder, "id"));
+    //   setColumns(boardFromDB.columns);
   }, []);
   console.log("Board Content re-render");
 
   if (isEmpty(board)) {
     return <div className="not-found">Not Found</div>;
   }
-  const onColumnDrop = (dropResult) => {
-    let newColumns = [...columns];
-    newColumns = applyDrag(newColumns, dropResult);
-    let newBoards = { ...board };
 
-    newBoards.columnOrder = newColumns.map((c) => c.id);
+  const onColumnDrop = (dropResult) => {
+    if (dropResult.removedIndex === dropResult.addedIndex) return;
+
+    let newColumns = cloneDeep(columns);
+    newColumns = applyDrag(newColumns, dropResult);
+    let newBoards = cloneDeep(board);
+
+    newBoards.columnOrder = newColumns.map((c) => c._id);
     newBoards.columns = newColumns;
+    //Call api update columnOrder in board detail
     setColumns(newColumns);
     setBoard(newBoards);
+    updateBoard(newBoards._id, newBoards).catch((err) => {
+      console.error(err);
+      setColumns(columns);
+      setBoard(board);
+    });
   };
+
   const onCardDrop = (columnId, dropResult) => {
+    if (dropResult.removedIndex === dropResult.addedIndex) return;
     if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
       /// Add Columns
       // dropResult.removedIndex
       //   ? (isResetColumn = true)
       //   : (isResetColumn = false);
-      let newColumns = [...columns];
-      let currentColumn = newColumns.find((item) => item.id === columnId);
+      let newColumns = cloneDeep(columns);
+      let currentColumn = newColumns.find((item) => item._id === columnId);
       currentColumn.cards = applyDrag(currentColumn.cards, dropResult);
-      currentColumn.cardOrder = currentColumn.cards.map((item) => item.id);
-      // if (isResetColumn) setColumns(newColumns);
+      currentColumn.cardOrder = currentColumn.cards.map((item) => item._id);
+      const dataColumnUpdated = { cardOrder: currentColumn.cardOrder };
       setColumns(newColumns);
+      if (dropResult.removedIndex !== null && dropResult.addedIndex !== null) {
+        /**
+         * Action: Move card inside its column
+         * Call api update cardOrder in current column
+         */
+        updateColumn(columnId, currentColumn).catch((err) => {
+          setColumns(columns);
+        });
+      } else {
+        /**
+         * Action: Move card between two columns
+         * Call api update cardOrder in current column
+         * Call api update columnId of card
+         */
+        updateColumn(columnId, currentColumn).catch((err) => {
+          setColumns(columns);
+        });
+
+        if (dropResult.addedIndex !== null) {
+          let currentCard = cloneDeep(dropResult.payload);
+          currentCard.columnId = columnId;
+          updateCard(currentCard._id, currentCard).catch((err) =>
+            setColumns(columns)
+          );
+        }
+      }
+      // if (isResetColumn) setColumns(newColumns);
     }
   };
 
@@ -66,9 +118,18 @@ function BoardContent() {
     let newBoards = { ...board };
 
     const newColumnsIndex = newColumns.findIndex(
-      (item) => item.id === columnUpdate.id
+      (item) => item._id === columnUpdate._id
     );
     if (type === ACTION_ADD) {
+      createNewColumn(columnUpdate).then((column) => {
+        let newColumns = [...columns];
+        let newBoards = { ...board };
+        newColumns.push(column);
+        newBoards.columnOrder = newColumns.map((c) => c._id);
+        newBoards.columns = newColumns;
+        setColumns(newColumns);
+        setBoard(newBoards);
+      });
       newColumns.push(columnUpdate);
     }
     if (type === ACTION_UPDATE) {
@@ -77,7 +138,7 @@ function BoardContent() {
     if (type === ACTION_REMOVE) {
       newColumns.splice(newColumnsIndex, 1);
     }
-    newBoards.columnOrder = newColumns.map((c) => c.id);
+    newBoards.columnOrder = newColumns.map((c) => c._id);
     newBoards.columns = newColumns;
 
     setColumns(newColumns);
@@ -89,11 +150,11 @@ function BoardContent() {
   //   let newBoards = { ...board };
 
   //   const newColumnsIndex = newColumns.findIndex(
-  //     (item) => item.id === newColomn.id
+  //     (item) => item._id === newColomn._id
   //   );
   //   newColumns.splice(newColumnsIndex, 1, newColomn);
 
-  //   newBoards.columnOrder = newColumns.map((c) => c.id);
+  //   newBoards.columnOrder = newColumns.map((c) => c._id);
   //   newBoards.columns = newColumns;
 
   //   setColumns(newColumns);
@@ -110,7 +171,7 @@ function BoardContent() {
         dropPlaceholder={{
           animationDuration: 150,
           showOnTop: true,
-          className: "column-drop-preview",
+          className: "column-drop-preview"
         }}
       >
         {columns.map((column, index) => {
