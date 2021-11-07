@@ -1,18 +1,20 @@
+import { cloneDeep } from "lodash";
+
 export const applyDrag = (arr, dragResult) => {
   const { removedIndex, addedIndex, payload } = dragResult;
   if (removedIndex === null && addedIndex === null) return arr;
 
-  const result = [...arr];
-  let itemToAdd = payload;
+  let result = cloneDeep(arr);
+  let itemToAdd = cloneDeep(payload);
 
   if (removedIndex !== null) {
     itemToAdd = result.splice(removedIndex, 1)[0];
+    const data = result;
   }
 
   if (addedIndex !== null) {
     result.splice(addedIndex, 0, itemToAdd);
   }
-
   return result;
 };
 

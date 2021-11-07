@@ -1,44 +1,46 @@
 @import "_setting";
 
-.btn-add-cl {
-  cursor: pointer;
-  width: 250px;
-  max-width: 250px;
-  // height: 32px;
-  line-height: 32px;
-  font-size: 16px;
-  color: white;
-  padding: 4px 0 4px 15px;
-  margin-left: $gap;
-  background: rgba(255, 255, 255, 0.24);
-  border-radius: $column-border-radius;
-  &:hover {
-    background: rgba(255, 255, 255, 0.34);
+.bootstrap-container {
+  .row {
+    width: 250px;
+    max-width: 250px;
   }
-}
-.bg-input-name-cl {
-  width: 250px;
-  max-width: 250 px;
-  background: $list-bg-color;
-  padding: 4px 15px;
-  line-height: 32px;
-  margin-left: $gap;
-  border-radius: $column-border-radius;
-  &#input-name-cl {
-    margin-top: 10px;
-  }
-}
-.box-btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 5px;
-  i {
+  .btn-add-cl {
     cursor: pointer;
-    font-size: 20px;
+    width: 250px;
+    max-width: 250px;
+    // height: 32px;
+    line-height: 32px;
+    font-size: 16px;
+    color: white;
+    padding: 4px 0 4px 15px;
+    margin-left: $gap;
+    background: rgba(255, 255, 255, 0.24);
+    border-radius: $column-border-radius;
+    &:hover {
+      background: rgba(255, 255, 255, 0.34);
+    }
   }
-}
-.row {
-  width: 250px;
-  max-width: 250;
+  .bg-input-name-cl {
+    width: 250px;
+    max-width: 250 px;
+    background: $list-bg-color;
+    padding: 4px 15px;
+    line-height: 32px;
+    margin-left: $gap;
+    border-radius: $column-border-radius;
+    &#input-name-cl {
+      margin-top: 10px;
+    }
+  }
+  .box-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5px;
+    i {
+      cursor: pointer;
+      font-size: 20px;
+    }
+  }
 }

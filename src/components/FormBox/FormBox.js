@@ -11,7 +11,6 @@ import {
 } from "react-bootstrap";
 
 function FormBox(props) {
-  console.log("Form Box re-render");
   //   const [board, setBoard] = props.boardState;
   //   const [columns, setColumns] = props.columnsState;
   const { board, onUpdateColumn } = props;

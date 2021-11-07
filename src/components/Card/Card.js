@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Card.scss";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Dropdown, Form, Button, CloseButton } from "react-bootstrap";
@@ -14,6 +14,10 @@ function Card(props) {
   const { card, onUpdateCard } = props;
   const [copied, setCopy] = useState(false);
   const [cardTitle, setCardTitle] = useState(card.title);
+
+  useEffect(() => {
+    setCardTitle(card.title);
+  }, [card.title]);
 
   const handleChangeNameBlur = () => {
     const cardUpdated = cloneDeep(card);

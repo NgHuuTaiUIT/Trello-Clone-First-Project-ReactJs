@@ -29,9 +29,7 @@ function Column(props) {
 
   const [formState, setFormState] = useState(false);
   const handleFormState = () => setFormState(!formState);
-  // const cards = mapOrder(column.cards, column.cardOrder, "id");
   const cards = mapOrder(column.cards, column.cardOrder, "_id") || [];
-  // const cards = column.cards || [];
 
   const messagesEndRef = useRef();
 

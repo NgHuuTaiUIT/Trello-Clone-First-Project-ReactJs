@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./BoardContent.scss";
 import Column from "components/Column/Column";
 import FormBox from "components/FormBox/FormBox";
 import { mapOrder } from "utilities/sort";
-import { initialData } from "actions/initialData";
 import { isEmpty, cloneDeep } from "lodash";
 import { Container, Draggable } from "react-smooth-dnd";
 import { applyDrag } from "utilities/utils";
@@ -19,10 +18,8 @@ import {
 function BoardContent() {
   const [board, setBoard] = useState({});
   const [columns, setColumns] = useState([]);
-
   useEffect(() => {
     apiGetDataBoard().then((data) => {
-      console.log(data);
       setBoard(data);
       const columnSorted = mapOrder(data.columns, data.columnOrder, "_id");
       setColumns(columnSorted);
@@ -40,7 +37,6 @@ function BoardContent() {
     //   setColumns(mapOrder(boardFromDB.columns, boardFromDB.columnOrder, "id"));
     //   setColumns(boardFromDB.columns);
   }, []);
-  console.log("Board Content re-render");
 
   if (isEmpty(board)) {
     return <div className="not-found">Not Found</div>;
@@ -48,20 +44,19 @@ function BoardContent() {
 
   const onColumnDrop = (dropResult) => {
     if (dropResult.removedIndex === dropResult.addedIndex) return;
-
     let newColumns = cloneDeep(columns);
     newColumns = applyDrag(newColumns, dropResult);
     let newBoards = cloneDeep(board);
 
     newBoards.columnOrder = newColumns.map((c) => c._id);
     newBoards.columns = newColumns;
+
     //Call api update columnOrder in board detail
     setColumns(newColumns);
-    setBoard(newBoards);
+
     updateBoard(newBoards._id, newBoards).catch((err) => {
-      console.error(err);
-      setColumns(columns);
-      setBoard(board);
+      // setColumns(columns);
+      // setBoard(board);
     });
   };
 
@@ -76,7 +71,7 @@ function BoardContent() {
       let currentColumn = newColumns.find((item) => item._id === columnId);
       currentColumn.cards = applyDrag(currentColumn.cards, dropResult);
       currentColumn.cardOrder = currentColumn.cards.map((item) => item._id);
-      const dataColumnUpdated = { cardOrder: currentColumn.cardOrder };
+      // const dataColumnUpdated = { cardOrder: currentColumn.cardOrder };
       setColumns(newColumns);
       if (dropResult.removedIndex !== null && dropResult.addedIndex !== null) {
         /**
@@ -106,11 +101,6 @@ function BoardContent() {
       }
       // if (isResetColumn) setColumns(newColumns);
     }
-  };
-
-  const handleNameColumn = (e) => {
-    console.log(e.target.value);
-    // setNameColumn(e.target.value);
   };
 
   const onUpdateColumn = (type, columnUpdate) => {
