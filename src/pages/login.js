@@ -19,7 +19,7 @@ const LoginPage = () => {
     res.then(res => {
       if (res.data.result === "ok") {
         Cookies.setItem("login_check", res.data.data.token, {
-          expires: 7,
+          expires: 1,
           path: "/"
         });
         setLogin(true);
@@ -28,10 +28,19 @@ const LoginPage = () => {
   };
   return (
     <div>
-      <h2>Login</h2>
-      <input ref={loginRef} type={"email"}></input>
-      <input ref={passwordRef} type={"password"}></input>
-      <button onClick={loginHandle}>Login</button>
+      <h2 style={{textAlign: "center"}}>Login</h2>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "auto",
+          flexDirection:"column"
+        }}>
+        <input ref={loginRef} type={"email"}></input>
+        <input ref={passwordRef} type={"password"}></input>
+        <button onClick={loginHandle}>Login</button>
+      </div>
     </div>
   );
 };
