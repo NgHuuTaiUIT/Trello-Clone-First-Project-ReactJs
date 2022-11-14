@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./AppBar.scss";
 import { Form, InputGroup, Container, Row, Col } from "react-bootstrap";
+import Cookies from "js-cookies";
+import { LoginContext } from "context/LoginContext";
 function AppBar() {
+  const { setLogin } = useContext(LoginContext);
+
+  const logoutHandle = () => {
+    Cookies.removeItem("login_check");
+    setLogin(false);
+  };
+  
   return (
     <nav className="navbar-app">
       <Container className="trello-container">
@@ -38,6 +47,9 @@ function AppBar() {
           </Col>
           <Col sm={5} xs={12} className="col-no-padding">
             <div className="user-actions">
+              <div className="item logout">
+                <button onClick={logoutHandle}>Logout</button>
+              </div>
               <div className="item quick">
                 <i className="fa fa-plus-square" />
               </div>
